@@ -1,43 +1,186 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "./shadcn-base.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* BrightPath brand palette (see Branding/GUIDE-BrightPath.md).
    Yellow is an accent only: never use it for text on a light background. */
 :root {
   --brand-blue: #0062c4;
+  --brand-blue-deep: #00468c;
   --brand-yellow: #f7c400;
 
   --background: #ffffff;
   --foreground: #0b1b2e;
+  --card: #ffffff;
+  --card-foreground: #0b1b2e;
+  --popover: #ffffff;
+  --popover-foreground: #0b1b2e;
   --primary: var(--brand-blue);
   --primary-foreground: #ffffff;
-  --accent: var(--brand-yellow);
+  --secondary: #f1f5fa;
+  --secondary-foreground: #0b1b2e;
+  --muted: #f1f5fa;
+  --muted-foreground: #526175;
+  --accent: #e8f1fb;
   --accent-foreground: #0b1b2e;
+  --destructive: #c4320a;
+  --border: #e1e7ef;
+  --input: #cfd8e3;
+  --ring: var(--brand-blue);
+  --radius: 0.625rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a1220;
-    --foreground: #eef3f9;
-    /* Lighter blue keeps readable contrast on a dark background. */
-    --primary: #4d9be6;
-    --primary-foreground: #0a1220;
-  }
+.dark {
+  --background: #0a1220;
+  --foreground: #eef3f9;
+  --card: #0f1a2c;
+  --card-foreground: #eef3f9;
+  --popover: #0f1a2c;
+  --popover-foreground: #eef3f9;
+  /* Lighter blue keeps readable contrast on a dark background. */
+  --primary: #4d9be6;
+  --primary-foreground: #06101d;
+  --secondary: #16233a;
+  --secondary-foreground: #eef3f9;
+  --muted: #16233a;
+  --muted-foreground: #9aabbf;
+  --accent: #16233a;
+  --accent-foreground: #eef3f9;
+  --destructive: #f97066;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 16%);
+  --ring: #4d9be6;
 }
 
 @theme inline {
   --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-deep: var(--brand-blue-deep);
   --color-brand-yellow: var(--brand-yellow);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --font-sans: var(--font-inter);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --animate-drift: drift 18s ease-in-out infinite;
+
+  @keyframes path-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes path-fill {
+    from {
+      fill-opacity: 0;
+    }
+    to {
+      fill-opacity: 1;
+    }
+  }
+
+  @keyframes light-on {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes glow {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.25);
+    }
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(2%, -3%, 0);
+    }
+  }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+/* Brand motion: the "b" path draws itself, then the light switches on. */
+@layer components {
+  .brand-path {
+    stroke-dasharray: 1;
+    animation:
+      path-draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) both,
+      path-fill 0.6s ease-out 1.3s both;
+  }
+
+  .brand-light {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: light-on 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s both;
+  }
+
+  .brand-halo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation:
+      light-on 0.7s ease-out 1.6s both,
+      glow 4s ease-in-out 2.3s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-path,
+    .brand-light,
+    .brand-halo {
+      animation: none;
+      stroke-dasharray: none;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

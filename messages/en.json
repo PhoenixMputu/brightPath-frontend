@@ -1,0 +1,43 @@
+{
+  "common": {
+    "themeToggle": "Toggle theme",
+    "themeLight": "Switch to light theme",
+    "themeDark": "Switch to dark theme",
+    "language": "Language",
+    "copyright": "© {year} BrightPath. All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "metaTitle": "Sign in",
+      "metaDescription": "Sign in to your BrightPath account.",
+      "brandEyebrow": "School guidance",
+      "brandTitle": "Every student deserves a bright path.",
+      "brandDescription": "BrightPath helps students, parents and counselors find the option that brings out each student's potential.",
+      "brandPointProfiles": "Clear, up-to-date student profiles",
+      "brandPointOptions": "Recommended options for every student",
+      "brandPointReports": "Reports ready to share with families",
+      "title": "Welcome back",
+      "subtitle": "Sign in to access your BrightPath account.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "name@school.cd",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Your password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "forgotPassword": "Forgot password?",
+      "rememberMe": "Keep me signed in",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "success": "Signed in. Welcome!",
+      "noAccount": "No account yet? Contact your school administrator.",
+      "errorInvalidCredentials": "Incorrect email address or password.",
+      "errorNetwork": "Can't reach the server. Check your connection and try again.",
+      "errorGeneric": "Something went wrong. Please try again."
+    }
+  },
+  "validation": {
+    "emailRequired": "Enter your email address.",
+    "emailInvalid": "Enter a valid email address.",
+    "passwordRequired": "Enter your password."
+  }
+}
