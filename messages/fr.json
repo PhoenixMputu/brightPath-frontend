@@ -1,0 +1,43 @@
+{
+  "common": {
+    "themeToggle": "Changer de thème",
+    "themeLight": "Passer au thème clair",
+    "themeDark": "Passer au thème sombre",
+    "language": "Langue",
+    "copyright": "© {year} BrightPath. Tous droits réservés."
+  },
+  "auth": {
+    "login": {
+      "metaTitle": "Connexion",
+      "metaDescription": "Connectez-vous à votre espace BrightPath.",
+      "brandEyebrow": "Orientation scolaire",
+      "brandTitle": "Chaque élève mérite un chemin lumineux.",
+      "brandDescription": "BrightPath aide élèves, parents et conseillers à trouver l'option qui révèle le potentiel de chacun.",
+      "brandPointProfiles": "Des profils d'élèves clairs et à jour",
+      "brandPointOptions": "Des options recommandées pour chaque élève",
+      "brandPointReports": "Des rapports prêts à partager avec les familles",
+      "title": "Bon retour parmi nous",
+      "subtitle": "Connectez-vous pour accéder à votre espace BrightPath.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "nom@ecole.cd",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Votre mot de passe",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "rememberMe": "Rester connecté",
+      "submit": "Se connecter",
+      "submitting": "Connexion en cours…",
+      "success": "Connexion réussie. Bienvenue !",
+      "noAccount": "Pas encore de compte ? Contactez l'administrateur de votre établissement.",
+      "errorInvalidCredentials": "Adresse e-mail ou mot de passe incorrect.",
+      "errorNetwork": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+    }
+  },
+  "validation": {
+    "emailRequired": "Saisissez votre adresse e-mail.",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "passwordRequired": "Saisissez votre mot de passe."
+  }
+}
