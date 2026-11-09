@@ -76,7 +76,7 @@ Examples: `feat/login-otp`, `fix/sidebar-overflow`
 
 - ❌ **Never `axios`.** Not as a direct dependency, not through a wrapper. Use native `fetch`.
 - ❌ **No rewrites**: no `rewrites` in `next.config`, no `NextResponse.rewrite()` in `proxy.ts`, no route handlers (`app/api/...`) that just pass requests through to the API. Services call the API directly.
-  - Single exception: the internal rewrite done by next-intl's middleware in `proxy.ts` to serve the default locale without a prefix (`/login` → `app/[locale]/login` with `fr`). Write no other rewrite.
+  - next-intl's middleware stays rewrite-free as long as `localePrefix` is `"always"` and `pathnames` are not localized. Do not change either.
 - ✅ `proxy.ts` is allowed (cookie checks, redirects).
 - ❌ No `Co-Authored-By` in commits.
 - ❌ No packages with known vulnerabilities.
@@ -179,7 +179,7 @@ Component → hook (hooks/) → service (services/) → fetch → API
 - Do not store server data in Zustand: that is React Query's job.
 
 ### Protected pages
-- Protection is handled in `proxy.ts`: read the cookies and `NextResponse.redirect()` to the login page of the current locale (`/login` or `/en/login`) when there is no session, then hand the request to the next-intl middleware. Never write a `NextResponse.rewrite()` yourself.
+- Protection is handled in `proxy.ts`: read the cookies and `NextResponse.redirect()` to the login page of the current locale (`/fr/login` or `/en/login`) when there is no session, then hand the request to the next-intl middleware. Never write a `NextResponse.rewrite()` yourself.
 - Keep a server-side check in `app/[locale]/(protected)/layout.tsx` for sensitive data (the proxy must not be the only barrier).
 
 ### Components
@@ -193,7 +193,8 @@ Component → hook (hooks/) → service (services/) → fetch → API
 
 ### Internationalization (next-intl)
 - Use next-intl **with i18n routing**: every page lives under `app/[locale]/`. Locales and the default locale are defined once in `src/i18n/routing.ts`.
-- URLs use `localePrefix: "as-needed"`: the default locale (`fr`) has no prefix (`/login`), other locales do (`/en/login`). `/fr/...` redirects to the unprefixed URL.
+- Every URL carries its locale: `localePrefix: "always"` (`/fr/login`, `/en/login`). French is the default: a URL without a prefix (`/login`, `/`) redirects to `/fr/...`.
+- `localeDetection: false`: the browser language and the `NEXT_LOCALE` cookie are ignored, so French stays the default. The language changes only through the URL (locale switcher).
 - `src/proxy.ts` runs next-intl's `createMiddleware(routing)`. Its `matcher` must keep excluding API routes, Next internals and files with an extension (PWA assets).
 - Navigate with `Link`, `useRouter`, `usePathname` and `redirect` from `@/i18n/navigation`, never from `next/link` or `next/navigation`, so the locale prefix is kept.
 - Layouts and pages under `[locale]` call `setRequestLocale(locale)` so they can be statically rendered.
@@ -234,7 +235,7 @@ Component → hook (hooks/) → service (services/) → fetch → API
 
 - [ ] Git identity is configured locally (without `--global`) with the project values
 - [ ] I am on a dedicated branch created from `dev`
-- [ ] No `axios` import, no Next.js rewrites (`next.config`, `proxy.ts` or pass-through route handler) other than next-intl's locale routing
+- [ ] No `axios` import, no Next.js rewrites (`next.config`, `proxy.ts` or pass-through route handler)
 - [ ] Code, comments and commits are in English
 - [ ] No hardcoded user-facing text: every key exists in each `messages/*.json` file
 - [ ] The UI has been checked in both light and dark mode
