@@ -67,6 +67,7 @@ Examples: `feat/login-otp`, `fix/sidebar-overflow`
 - **React Hook Form** (+ `@hookform/resolvers/zod`): forms
 - **next-intl**: internationalization
 - **next-themes**: dark mode (light / dark / system)
+- **PWA**: the app must be an installable Progressive Web App (native Next.js manifest + service worker)
 - **Bun**: package manager and runner. Do not use npm, yarn or pnpm.
 
 ---
@@ -101,10 +102,14 @@ bun audit
 
 ```
 messages/              # next-intl translations (en.json, fr.json, ...)
+public/
+├── sw.js              # Service worker
+└── icons/             # PWA icons (192x192, 512x512, maskable)
 src/
 ├── i18n/
 │   └── request.ts     # next-intl config (locale resolution)
 ├── app/
+│   ├── manifest.ts    # Web app manifest
 │   ├── (protected)/   # Protected pages (access via session cookies)
 │   └── (public)/      # Pages accessible without login (login, verify-otp, ...)
 ├── components/
@@ -195,6 +200,21 @@ Component → hook (hooks/) → service (services/) → fetch → API
 - Dark styles use Tailwind `dark:` variants and shadcn CSS variables. No hardcoded colors that break in dark mode.
 - Render the theme switcher only after client-side mount, to avoid hydration errors.
 
+### PWA
+- The app must stay installable as a PWA at all times. Do not break the manifest, icons or service worker.
+- Manifest in `src/app/manifest.ts` (typed with `MetadataRoute.Manifest`): `name`, `short_name`, `description`, `start_url`, `display: "standalone"`, `background_color`, `theme_color`, and icons (192x192, 512x512, plus a `maskable` icon) in `public/icons/`.
+- Service worker in `public/sw.js`, registered from a small client component in `components/layout/` (only in production, and only if `"serviceWorker" in navigator`).
+- Do not use `next-pwa` (unmaintained). Any PWA library must pass `bun audit` and be approved before being added.
+- In `next.config`, `headers()` may be used for `sw.js` (`Cache-Control: no-cache, no-store, must-revalidate` and a correct `Content-Type`). Headers are allowed; rewrites are still forbidden.
+- `proxy.ts` must exclude PWA assets from its `matcher`: `sw.js`, `manifest.webmanifest`, `icons/`, and static files. Otherwise they get redirected to `/login` and installation breaks.
+- Caching rules in the service worker:
+   - Static assets (`/_next/static/`, icons, fonts): cache-first.
+   - Page navigations: network-first, with an offline fallback page.
+   - **Never cache API responses or protected pages that contain user data.**
+   - Version the cache name and delete old caches on `activate`.
+- `theme_color` must match the app's theme. Use `viewport.themeColor` in the root layout, with a value for light mode and one for dark mode.
+- The offline page text goes through next-intl like any other user-facing text.
+
 ### TypeScript
 - Strict mode. No `any`; prefer `unknown` and narrow it.
 - Imports use the `@/` alias (e.g. `@/services/auth`).
@@ -209,6 +229,8 @@ Component → hook (hooks/) → service (services/) → fetch → API
 - [ ] Code, comments and commits are in English
 - [ ] No hardcoded user-facing text: every key exists in each `messages/*.json` file
 - [ ] The UI has been checked in both light and dark mode
+- [ ] The app is still installable as a PWA (manifest valid, service worker registered, PWA assets not blocked by `proxy.ts`)
+- [ ] No API responses or protected user data are cached by the service worker
 - [ ] `bun audit` passes with no vulnerabilities
 - [ ] `bun run lint` and `bun run build` pass
 - [ ] No `Co-Authored-By` in commits
