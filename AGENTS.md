@@ -76,6 +76,7 @@ Examples: `feat/login-otp`, `fix/sidebar-overflow`
 
 - ❌ **Never `axios`.** Not as a direct dependency, not through a wrapper. Use native `fetch`.
 - ❌ **No rewrites**: no `rewrites` in `next.config`, no `NextResponse.rewrite()` in `proxy.ts`, no route handlers (`app/api/...`) that just pass requests through to the API. Services call the API directly.
+  - Single exception: the internal rewrite done by next-intl's middleware in `proxy.ts` to serve the default locale without a prefix (`/login` → `app/[locale]/login` with `fr`). Write no other rewrite.
 - ✅ `proxy.ts` is allowed (cookie checks, redirects).
 - ❌ No `Co-Authored-By` in commits.
 - ❌ No packages with known vulnerabilities.
@@ -106,12 +107,17 @@ public/
 ├── sw.js              # Service worker
 └── icons/             # PWA icons (192x192, 512x512, maskable)
 src/
+├── proxy.ts           # next-intl locale routing (+ session redirects)
 ├── i18n/
-│   └── request.ts     # next-intl config (locale resolution)
+│   ├── routing.ts     # Locales, default locale, prefix strategy
+│   ├── navigation.ts  # Locale-aware Link, useRouter, usePathname, redirect
+│   └── request.ts     # next-intl request config (messages per locale)
 ├── app/
 │   ├── manifest.ts    # Web app manifest
-│   ├── (protected)/   # Protected pages (access via session cookies)
-│   └── (public)/      # Pages accessible without login (login, verify-otp, ...)
+│   └── [locale]/
+│       ├── layout.tsx     # Root layout (<html lang>, providers)
+│       ├── (protected)/   # Protected pages (access via session cookies)
+│       └── (public)/      # Pages accessible without login (login, verify-otp, ...)
 ├── components/
 │   ├── shared/        # Components reusable anywhere in the project
 │   ├── ui/            # shadcn components (generated, edit sparingly)
@@ -173,8 +179,8 @@ Component → hook (hooks/) → service (services/) → fetch → API
 - Do not store server data in Zustand: that is React Query's job.
 
 ### Protected pages
-- Protection is handled in `proxy.ts`: read the cookies and `NextResponse.redirect()` to `/login` when there is no session. Never `NextResponse.rewrite()`.
-- Keep a server-side check in `app/(protected)/layout.tsx` for sensitive data (the proxy must not be the only barrier).
+- Protection is handled in `proxy.ts`: read the cookies and `NextResponse.redirect()` to the login page of the current locale (`/login` or `/en/login`) when there is no session, then hand the request to the next-intl middleware. Never write a `NextResponse.rewrite()` yourself.
+- Keep a server-side check in `app/[locale]/(protected)/layout.tsx` for sensitive data (the proxy must not be the only barrier).
 
 ### Components
 - Server Components by default; `"use client"` only when needed (state, effects, events, hooks).
@@ -186,8 +192,11 @@ Component → hook (hooks/) → service (services/) → fetch → API
 - User-facing text is never hardcoded: it goes through next-intl (see below).
 
 ### Internationalization (next-intl)
-- Use next-intl **without i18n routing**: no `[locale]` segment in `app/`, no next-intl `createMiddleware` (it performs rewrites, which are forbidden).
-- The locale is read from a cookie (e.g. `NEXT_LOCALE`) in `src/i18n/request.ts`, with a default locale as fallback.
+- Use next-intl **with i18n routing**: every page lives under `app/[locale]/`. Locales and the default locale are defined once in `src/i18n/routing.ts`.
+- URLs use `localePrefix: "as-needed"`: the default locale (`fr`) has no prefix (`/login`), other locales do (`/en/login`). `/fr/...` redirects to the unprefixed URL.
+- `src/proxy.ts` runs next-intl's `createMiddleware(routing)`. Its `matcher` must keep excluding API routes, Next internals and files with an extension (PWA assets).
+- Navigate with `Link`, `useRouter`, `usePathname` and `redirect` from `@/i18n/navigation`, never from `next/link` or `next/navigation`, so the locale prefix is kept.
+- Layouts and pages under `[locale]` call `setRequestLocale(locale)` so they can be statically rendered.
 - All translations live in `messages/<locale>.json`, organized by namespace (e.g. `auth`, `dashboard`, `common`). Keys are in English and `camelCase`.
 - Server Components: `getTranslations`. Client Components: `useTranslations`.
 - Every new key must be added to **all** files in `messages/`.
@@ -225,7 +234,7 @@ Component → hook (hooks/) → service (services/) → fetch → API
 
 - [ ] Git identity is configured locally (without `--global`) with the project values
 - [ ] I am on a dedicated branch created from `dev`
-- [ ] No `axios` import, no Next.js rewrites (`next.config`, `proxy.ts` or pass-through route handler)
+- [ ] No `axios` import, no Next.js rewrites (`next.config`, `proxy.ts` or pass-through route handler) other than next-intl's locale routing
 - [ ] Code, comments and commits are in English
 - [ ] No hardcoded user-facing text: every key exists in each `messages/*.json` file
 - [ ] The UI has been checked in both light and dark mode
