@@ -2,8 +2,8 @@ import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
 
-// Locale routing only. For the default locale (fr) next-intl rewrites
-// /login to /fr/login internally: this is the one rewrite allowed in AGENTS.md.
+// Locale routing only: URLs without a locale prefix redirect to /fr/...
+// With localePrefix "always", next-intl never rewrites.
 export default createMiddleware(routing);
 
 export const config = {
