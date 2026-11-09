@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { BrandLogo } from "@/components/shared/brand-logo";
 import { LocaleSwitcher } from "@/components/shared/locale-switcher";
@@ -8,12 +8,20 @@ import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { BrandPanel } from "./brand-panel";
 import { LoginForm } from "./login-form";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("auth.login");
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/login">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "auth.login" });
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  params,
+}: PageProps<"/[locale]/login">) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations("auth.login");
   const tCommon = await getTranslations("common");
 

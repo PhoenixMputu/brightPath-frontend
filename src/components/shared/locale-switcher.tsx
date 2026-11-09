@@ -1,25 +1,23 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
-import { setLocale } from "@/i18n/actions";
-import { locales } from "@/i18n/config";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { routing, type Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 export function LocaleSwitcher({ className }: { className?: string }) {
   const t = useTranslations("common");
   const currentLocale = useLocale();
+  const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  function changeLocale(locale: string) {
+  function changeLocale(locale: Locale) {
     if (locale === currentLocale) return;
-    startTransition(async () => {
-      await setLocale(locale);
-      router.refresh();
-    });
+    // Same page, other locale: /login <-> /en/login.
+    startTransition(() => router.replace(pathname, { locale }));
   }
 
   return (
@@ -32,7 +30,7 @@ export function LocaleSwitcher({ className }: { className?: string }) {
         className,
       )}
     >
-      {locales.map((locale) => {
+      {routing.locales.map((locale) => {
         const active = locale === currentLocale;
         return (
           <button
