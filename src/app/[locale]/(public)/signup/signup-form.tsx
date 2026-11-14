@@ -101,12 +101,14 @@ export function SignupForm() {
         const conflict = error.code ? fieldConflicts[error.code] : undefined;
         if (conflict) {
           const [name, key] = conflict;
-          form.setError(
-            name,
-            { type: "server", message: `${SERVER_PREFIX}${key}` },
-            { shouldFocus: true },
-          );
+          form.setError(name, {
+            type: "server",
+            message: `${SERVER_PREFIX}${key}`,
+          });
           registerMutation.reset();
+          // Inputs are disabled while the request is pending: focus the field
+          // once the form is enabled again.
+          setTimeout(() => form.setFocus(name, { shouldSelect: true }), 0);
         }
       },
     });
