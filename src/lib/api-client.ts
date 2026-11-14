@@ -9,6 +9,15 @@ export class ApiError extends Error {
     super(message);
     this.name = "ApiError";
   }
+
+  /** Machine-readable error code sent by the API (e.g. EMAIL_ALREADY_IN_USE). */
+  get code(): string | undefined {
+    const body = this.body;
+    if (typeof body === "object" && body !== null && "code" in body) {
+      return typeof body.code === "string" ? body.code : undefined;
+    }
+    return undefined;
+  }
 }
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: unknown };

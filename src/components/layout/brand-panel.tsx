@@ -6,14 +6,14 @@ const SYMBOL_PATH =
   "M80.0 163V33A14.0 14.0 0 0 0 52.0 33V163ZM52.0 161A72.0 72.0 0 1 0 124 89.0L124 117.0A44.0 44.0 0 1 1 80.0 161ZM126 89.0H100A14.0 14.0 0 0 0 100 117.0H126Z";
 
 const POINTS = [
-  "brandPointProfiles",
-  "brandPointOptions",
-  "brandPointReports",
+  "pointProfiles",
+  "pointOptions",
+  "pointReports",
 ] as const;
 
 /** Left-hand brand panel of the login page (large screens only). */
 export async function BrandPanel() {
-  const t = await getTranslations("auth.login");
+  const t = await getTranslations("auth.brand");
   const tCommon = await getTranslations("common");
 
   return (
@@ -77,13 +77,13 @@ export async function BrandPanel() {
         </svg>
 
         <p className="flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-white/90 uppercase before:h-0.5 before:w-6 before:rounded-full before:bg-brand-yellow motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 motion-safe:delay-300 motion-safe:fill-mode-both">
-          {t("brandEyebrow")}
+          {t("eyebrow")}
         </p>
         <p className="mt-4 text-4xl leading-[1.1] font-semibold tracking-tight text-balance xl:text-5xl motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 motion-safe:delay-[450ms] motion-safe:fill-mode-both">
-          {t("brandTitle")}
+          {t("title")}
         </p>
         <p className="mt-5 text-lg leading-relaxed text-pretty text-white/85 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 motion-safe:delay-[600ms] motion-safe:fill-mode-both">
-          {t("brandDescription")}
+          {t("description")}
         </p>
 
         <ul className="mt-10 space-y-4">
