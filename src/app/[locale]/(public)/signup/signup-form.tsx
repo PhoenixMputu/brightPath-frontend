@@ -51,13 +51,13 @@ function bannerKey(error: unknown) {
   return error instanceof TypeError ? "errorNetwork" : "errorGeneric";
 }
 
-const inputClass = "h-11 rounded-lg pl-10 text-base md:text-sm";
+const inputClass = "h-11 rounded-lg pl-9 text-base md:text-sm";
 
 function InputIcon({ icon: Icon }: { icon: LucideIcon }) {
   return (
     <Icon
       aria-hidden
-      className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200 group-focus-within/input:text-primary"
+      className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200 group-focus-within/input:text-primary"
     />
   );
 }
@@ -127,7 +127,7 @@ export function SignupForm() {
           {registerMutation.isError && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/8 px-3.5 py-3 text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-300"
+              className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/8 px-4 py-3 text-sm text-destructive motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:duration-300"
             >
               <CircleAlertIcon className="mt-px size-4 shrink-0" aria-hidden />
               <p>{t(bannerKey(registerMutation.error))}</p>
@@ -289,7 +289,7 @@ export function SignupForm() {
             type="submit"
             disabled={isPending}
             aria-busy={isPending}
-            className="group/submit mt-1 h-11 w-full cursor-pointer rounded-lg text-base font-semibold shadow-[0_1px_2px_rgb(0_0_0/0.06),0_8px_24px_-8px_var(--color-primary)] transition-[background-color,box-shadow,transform] duration-200 hover:bg-primary/90 hover:shadow-[0_1px_2px_rgb(0_0_0/0.06),0_12px_28px_-8px_var(--color-primary)]"
+            className="group/submit mt-1 h-11 w-full cursor-pointer rounded-lg text-base font-medium hover:bg-primary/90"
           >
             {isPending ? (
               <>
@@ -313,7 +313,7 @@ export function SignupForm() {
         {t("hasAccount")}{" "}
         <Link
           href="/login"
-          className="rounded-sm font-semibold text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="rounded-sm font-medium text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {t("signIn")}
         </Link>

@@ -19,28 +19,28 @@ export function PasswordRules({ id, value }: { id: string; value: string }) {
   const rules = Object.keys(passwordRules) as PasswordRule[];
 
   return (
-    <div id={id} className="rounded-lg bg-muted/60 px-3.5 py-3">
+    <div id={id} className="rounded-lg bg-muted/60 px-4 py-3">
       <p className="text-xs font-medium text-muted-foreground">
         {t("passwordRulesTitle")}
       </p>
-      <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2">
+      <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
         {rules.map((rule) => {
           const met = passwordRules[rule](value);
           return (
             <li
               key={rule}
               className={cn(
-                "flex items-center gap-2 text-xs transition-colors duration-300",
+                "flex items-center gap-2 text-xs transition-colors duration-200",
                 met ? "text-foreground" : "text-muted-foreground",
               )}
             >
               <span
                 aria-hidden
                 className={cn(
-                  "flex size-4 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
+                  "flex size-4 shrink-0 items-center justify-center rounded-full border transition-colors duration-200",
                   met
-                    ? "scale-100 border-primary bg-primary text-primary-foreground"
-                    : "scale-90 border-input bg-background",
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-input bg-background",
                 )}
               >
                 <CheckIcon

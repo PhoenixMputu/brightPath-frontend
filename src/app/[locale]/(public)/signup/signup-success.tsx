@@ -19,24 +19,9 @@ export function SignupSuccess({ email }: { email: string }) {
   }, []);
 
   return (
-    <div className="text-center motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-500">
-      <div className="relative mx-auto mb-7 flex size-20 items-center justify-center">
-        <span
-          aria-hidden
-          className="absolute inset-0 rounded-full bg-primary/10 motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:duration-700"
-        />
-        <span
-          aria-hidden
-          className="absolute inset-2 rounded-full bg-primary/15 motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:duration-700 motion-safe:delay-100 motion-safe:fill-mode-both"
-        />
-        <MailCheckIcon
-          aria-hidden
-          className="relative size-9 text-primary motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500 motion-safe:delay-200 motion-safe:fill-mode-both"
-        />
-        <span
-          aria-hidden
-          className="absolute top-1 right-1 size-3 rounded-full bg-brand-yellow shadow-[0_0_0_4px_rgb(247_196_0/0.2)] motion-safe:animate-in motion-safe:zoom-in-0 motion-safe:duration-500 motion-safe:delay-500 motion-safe:fill-mode-both"
-        />
+    <div className="text-center motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500">
+      <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-muted">
+        <MailCheckIcon aria-hidden className="size-7 text-primary" />
       </div>
 
       <h1
