@@ -10,7 +10,7 @@ export function AuthHeading({
     <div className="mb-8">
       <span
         aria-hidden
-        className="mb-5 block size-2.5 rounded-full bg-brand-yellow shadow-[0_0_0_5px_rgb(247_196_0/0.2)] motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:fade-in motion-safe:duration-500 motion-safe:delay-300 motion-safe:fill-mode-both"
+        className="mb-4 block size-2.5 rounded-full bg-brand-yellow"
       />
       <h1 className="text-3xl font-semibold tracking-tight text-balance">
         {title}
