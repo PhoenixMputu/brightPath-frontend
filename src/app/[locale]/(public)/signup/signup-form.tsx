@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightIcon,
+  Building2Icon,
   CircleAlertIcon,
   EyeIcon,
   EyeOffIcon,
@@ -13,6 +14,7 @@ import {
   UserIcon,
   type LucideIcon,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useForm, useWatch, type FieldPath } from "react-hook-form";
@@ -24,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { useRegisterMutation } from "@/hooks/use-register-mutation";
 import { Link } from "@/i18n/navigation";
 import { ApiError } from "@/lib/api-client";
+import { queryKeys } from "@/lib/query-keys";
 import { cn } from "@/lib/utils";
 import {
   normalizePhone,
@@ -34,6 +37,7 @@ import {
 import { REGISTER_ERROR_CODES } from "@/types/auth";
 
 import { PasswordRules } from "./password-rules";
+import { ProvinceSelect } from "./province-select";
 import { SignupSuccess } from "./signup-success";
 
 // Field errors are translation keys. Keys starting with "signup." come from
@@ -67,6 +71,7 @@ export function SignupForm() {
   const tValidation = useTranslations("validation");
   const [showPassword, setShowPassword] = useState(false);
   const registerMutation = useRegisterMutation();
+  const queryClient = useQueryClient();
 
   const form = useForm<RegisterFormValues, unknown, RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -75,7 +80,10 @@ export function SignupForm() {
       lastName: "",
       email: "",
       phone: "",
+      provinceId: "",
+      city: "",
       password: "",
+      confirmPassword: "",
     },
     mode: "onTouched",
   });
@@ -97,10 +105,15 @@ export function SignupForm() {
         const fieldConflicts: Record<string, [FieldPath<RegisterFormValues>, string]> = {
           [REGISTER_ERROR_CODES.emailInUse]: ["email", "errorEmailInUse"],
           [REGISTER_ERROR_CODES.phoneInUse]: ["phone", "errorPhoneInUse"],
+          [REGISTER_ERROR_CODES.provinceNotFound]: ["provinceId", "errorProvinceNotFound"],
         };
         const conflict = error.code ? fieldConflicts[error.code] : undefined;
         if (conflict) {
           const [name, key] = conflict;
+          // The list is stale: fetch it again so the removed province disappears.
+          if (name === "provinceId") {
+            void queryClient.invalidateQueries({ queryKey: queryKeys.provinces.all });
+          }
           form.setError(name, {
             type: "server",
             message: `${SERVER_PREFIX}${key}`,
@@ -238,9 +251,67 @@ export function SignupForm() {
             )}
           />
 
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-4">
+            <Controller
+              name="provinceId"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="provinceId">{t("provinceLabel")}</FieldLabel>
+                  <ProvinceSelect
+                    id="provinceId"
+                    name={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    invalid={fieldState.invalid}
+                    describedBy={fieldState.invalid ? "provinceId-error" : undefined}
+                    disabled={isPending}
+                  />
+                  {fieldState.error?.message && (
+                    <FieldError id="provinceId-error">
+                      {errorText(fieldState.error.message)}
+                    </FieldError>
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="city"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="city">{t("cityLabel")}</FieldLabel>
+                  <div className="group/input relative">
+                    <InputIcon icon={Building2Icon} />
+                    <Input
+                      {...field}
+                      id="city"
+                      autoComplete="address-level2"
+                      placeholder={t("cityPlaceholder")}
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby={fieldState.invalid ? "city-error" : undefined}
+                      disabled={isPending}
+                      className={inputClass}
+                    />
+                  </div>
+                  {fieldState.error?.message && (
+                    <FieldError id="city-error">
+                      {errorText(fieldState.error.message)}
+                    </FieldError>
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+
           <Controller
             name="password"
             control={form.control}
+            // Re-check the confirmation when the password changes.
+            rules={{ deps: "confirmPassword" }}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="password">{t("passwordLabel")}</FieldLabel>
@@ -281,6 +352,40 @@ export function SignupForm() {
                   </FieldError>
                 )}
                 <PasswordRules id="password-rules" value={password} />
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="confirmPassword"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="confirmPassword">
+                  {t("confirmPasswordLabel")}
+                </FieldLabel>
+                <div className="group/input relative">
+                  <InputIcon icon={LockIcon} />
+                  <Input
+                    {...field}
+                    id="confirmPassword"
+                    // Follows the show/hide toggle of the password field.
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    placeholder={t("confirmPasswordPlaceholder")}
+                    aria-invalid={fieldState.invalid}
+                    aria-describedby={
+                      fieldState.invalid ? "confirmPassword-error" : undefined
+                    }
+                    disabled={isPending}
+                    className={inputClass}
+                  />
+                </div>
+                {fieldState.error?.message && (
+                  <FieldError id="confirmPassword-error">
+                    {errorText(fieldState.error.message)}
+                  </FieldError>
+                )}
               </Field>
             )}
           />
