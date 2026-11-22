@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api-client";
-import type { LoginInput, RegisterInput } from "@/schemas/auth";
+import type { LoginInput, RegisterPayload } from "@/schemas/auth";
 import type { RegisterResponse } from "@/types/auth";
 
 export type LoginResponse = {
@@ -19,9 +19,19 @@ export function login(input: LoginInput) {
 }
 
 /** POST /auth/register: creates an INACTIVE user and emails a 6-digit code. */
-export function register(input: RegisterInput) {
+export function register(input: RegisterPayload) {
+  // Pick the fields explicitly so form-only values never reach the API.
+  const body: RegisterPayload = {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    email: input.email,
+    phone: input.phone,
+    provinceId: input.provinceId,
+    city: input.city,
+    password: input.password,
+  };
   return apiFetch<RegisterResponse>("/auth/register", {
     method: "POST",
-    body: input,
+    body,
   });
 }

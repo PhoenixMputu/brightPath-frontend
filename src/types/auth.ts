@@ -1,4 +1,6 @@
-// Shapes returned by the BrightPath API (see /api/docs on the backend).
+// Shapes returned by the BrightPath API (see /docs on the backend).
+
+import type { Province } from "@/types/province";
 
 export type UserStatus = "ACTIVE" | "INACTIVE" | (string & {});
 
@@ -8,6 +10,8 @@ export type User = {
   lastName: string;
   email: string;
   phone: string;
+  province: Province;
+  city: string;
   /** INACTIVE until the email is verified. */
   status: UserStatus;
   createdAt: string;
@@ -24,4 +28,5 @@ export const REGISTER_ERROR_CODES = {
   phoneInUse: "PHONE_ALREADY_IN_USE",
   userExists: "USER_ALREADY_EXISTS",
   emailNotSent: "VERIFICATION_EMAIL_NOT_SENT",
+  provinceNotFound: "PROVINCE_NOT_FOUND",
 } as const;

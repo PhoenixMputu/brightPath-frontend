@@ -49,31 +49,57 @@ const nameField = (requiredKey: string) =>
     .min(1, { error: requiredKey })
     .max(100, { error: "nameTooLong" });
 
-export const registerSchema = z.object({
-  firstName: nameField("firstNameRequired"),
-  lastName: nameField("lastNameRequired"),
-  email: emailField,
-  phone: z
-    .string()
-    .trim()
-    .min(1, { error: "phoneRequired" })
-    .transform(normalizePhone)
-    .pipe(z.string().regex(/^\+[1-9]\d{7,14}$/, { error: "phoneInvalid" })),
-  // Not trimmed, as on the API side.
-  password: z
-    .string()
-    .min(8, { error: "passwordTooShort" })
-    .max(128, { error: "passwordTooLong" })
-    .refine(
-      (value) =>
-        passwordRules.uppercase(value) &&
-        passwordRules.lowercase(value) &&
-        passwordRules.digit(value),
-      { error: "passwordWeak" },
-    ),
+// Not trimmed, as on the API side.
+const passwordField = z
+  .string()
+  .min(8, { error: "passwordTooShort" })
+  .max(128, { error: "passwordTooLong" })
+  .refine(
+    (value) =>
+      passwordRules.uppercase(value) &&
+      passwordRules.lowercase(value) &&
+      passwordRules.digit(value),
+    { error: "passwordWeak" },
+  );
+
+const passwordPair = z.object({
+  password: passwordField,
+  confirmPassword: z.string().min(1, { error: "confirmPasswordRequired" }),
 });
+
+export const registerSchema = z
+  .object({
+    firstName: nameField("firstNameRequired"),
+    lastName: nameField("lastNameRequired"),
+    email: emailField,
+    phone: z
+      .string()
+      .trim()
+      .min(1, { error: "phoneRequired" })
+      .transform(normalizePhone)
+      .pipe(z.string().regex(/^\+[1-9]\d{7,14}$/, { error: "phoneInvalid" })),
+    // Id of a province from GET /provinces.
+    provinceId: z.string().min(1, { error: "provinceRequired" }),
+    city: z
+      .string()
+      .trim()
+      .min(1, { error: "cityRequired" })
+      .max(100, { error: "cityTooLong" }),
+    password: passwordField,
+    // Form only: never sent to the API.
+    confirmPassword: passwordPair.shape.confirmPassword,
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    error: "passwordMismatch",
+    path: ["confirmPassword"],
+    // Compare as soon as both passwords are valid, even if other fields
+    // (name, city, ...) still have errors.
+    when: (payload) => passwordPair.safeParse(payload.value).success,
+  });
 
 /** Values typed in the form (before normalization). */
 export type RegisterFormValues = z.input<typeof registerSchema>;
-/** Payload sent to the API (trimmed, lowercased email, E.164 phone). */
+/** Validated form values (trimmed, lowercased email, E.164 phone). */
 export type RegisterInput = z.output<typeof registerSchema>;
+/** Body of POST /auth/register. */
+export type RegisterPayload = Omit<RegisterInput, "confirmPassword">;
