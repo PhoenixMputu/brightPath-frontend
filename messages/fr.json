@@ -75,11 +75,43 @@
       "errorEmailNotSent": "Nous n'avons pas pu envoyer l'e-mail de vérification. Votre compte n'a pas été créé, veuillez réessayer.",
       "errorInvalid": "Certaines informations sont invalides. Vérifiez le formulaire.",
       "errorNetwork": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
-      "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
-      "successTitle": "Vérifiez votre boîte mail",
-      "successDescription": "Nous avons envoyé un code de vérification à 6 chiffres à <email>{address}</email>. Saisissez-le pour activer votre compte.",
-      "successHint": "Pensez à vérifier vos courriers indésirables.",
-      "backToLogin": "Retour à la connexion"
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "verifyEmail": {
+      "metaTitle": "Vérifier votre adresse e-mail",
+      "metaDescription": "Saisissez le code reçu par e-mail pour activer votre compte BrightPath.",
+      "title": "Vérifiez votre adresse e-mail",
+      "subtitle": "Saisissez votre adresse et le code à 6 chiffres reçu par e-mail",
+      "subtitleWithEmail": "Saisissez le code à 6 chiffres envoyé à <email>{address}</email>",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "nom@exemple.cd",
+      "codeLabel": "Code de vérification",
+      "codeHint": "Le code expire après 10 minutes. Pensez à vérifier vos courriers indésirables.",
+      "submit": "Vérifier",
+      "submitting": "Vérification…",
+      "success": "Adresse vérifiée, votre compte est activé",
+      "noCode": "Vous n'avez rien reçu ?",
+      "resend": "Renvoyer le code",
+      "resending": "Envoi…",
+      "resendIn": "Nouveau code possible dans {time}",
+      "codeResent": "Un nouveau code vous a été envoyé",
+      "wrongEmail": "Ce n'est pas votre adresse ?",
+      "changeEmail": "Recommencer l'inscription",
+      "alreadyActive": "Compte déjà activé ?",
+      "signIn": "Se connecter",
+      "errorCodeIncorrect": "Code incorrect. Vérifiez-le et réessayez.",
+      "errorCodeOrEmailIncorrect": "Code incorrect, ou adresse e-mail inconnue.",
+      "errorCodeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+      "errorAlreadyVerified": "Cette adresse est déjà vérifiée.",
+      "errorTooManyAttempts": "Trop d'essais pour ce code. Demandez-en un nouveau.",
+      "errorLocked": "Trop d'essais aujourd'hui. Réessayez dans 24 heures.",
+      "errorSessionNotOpened": "Votre code était bon, mais la connexion n'a pas pu s'ouvrir. Demandez un nouveau code.",
+      "errorResendTooSoon": "Un code vient d'être envoyé. Patientez une minute avant d'en demander un autre.",
+      "errorResendLimit": "Vous avez demandé 5 codes en une heure. Réessayez plus tard.",
+      "errorEmailNotSent": "L'e-mail n'a pas pu être envoyé. Réessayez.",
+      "errorInvalid": "Certaines informations sont invalides. Vérifiez le formulaire.",
+      "errorNetwork": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
     }
   },
   "validation": {
@@ -99,6 +131,7 @@
     "cityRequired": "Saisissez votre ville.",
     "cityTooLong": "100 caractères maximum.",
     "confirmPasswordRequired": "Confirmez votre mot de passe.",
-    "passwordMismatch": "Les mots de passe ne correspondent pas."
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "codeInvalid": "Saisissez les 6 chiffres du code."
   }
 }

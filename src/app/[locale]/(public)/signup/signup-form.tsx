@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useRegisterMutation } from "@/hooks/use-register-mutation";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { ApiError } from "@/lib/api-client";
 import { queryKeys } from "@/lib/query-keys";
 import { cn } from "@/lib/utils";
@@ -34,10 +34,10 @@ import {
   type RegisterFormValues,
   type RegisterInput,
 } from "@/schemas/auth";
+import { useVerificationStore } from "@/stores/verification-store";
 import { REGISTER_ERROR_CODES } from "@/types/auth";
 
 import { ProvinceSelect } from "./province-select";
-import { SignupSuccess } from "./signup-success";
 
 // Field errors are translation keys. Keys starting with "signup." come from
 // API conflicts (auth.signup namespace); the others are Zod validation keys.
@@ -71,6 +71,8 @@ export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const registerMutation = useRegisterMutation();
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const startVerification = useVerificationStore((state) => state.start);
 
   const form = useForm<RegisterFormValues, unknown, RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -87,7 +89,8 @@ export function SignupForm() {
     mode: "onTouched",
   });
 
-  const isPending = registerMutation.isPending;
+  // Stay disabled after success while the page redirects.
+  const isPending = registerMutation.isPending || registerMutation.isSuccess;
 
   function errorText(message: string) {
     return message.startsWith(SERVER_PREFIX)
@@ -97,6 +100,11 @@ export function SignupForm() {
 
   function onSubmit(values: RegisterInput) {
     registerMutation.mutate(values, {
+      onSuccess: (response) => {
+        // The email goes through the store, never through the URL.
+        startVerification(response.data.email);
+        router.replace("/verify-email");
+      },
       onError: (error) => {
         if (!(error instanceof ApiError)) return;
         // Conflicts point to one field: show them right under it.
@@ -123,10 +131,6 @@ export function SignupForm() {
         }
       },
     });
-  }
-
-  if (registerMutation.isSuccess) {
-    return <SignupSuccess email={registerMutation.data.data.email} />;
   }
 
   return (

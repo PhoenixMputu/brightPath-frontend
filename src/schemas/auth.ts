@@ -101,3 +101,17 @@ export type RegisterFormValues = z.input<typeof registerSchema>;
 export type RegisterInput = z.output<typeof registerSchema>;
 /** Body of POST /auth/register. */
 export type RegisterPayload = Omit<RegisterInput, "confirmPassword">;
+
+/** Length of the verification code sent by email. */
+export const VERIFICATION_CODE_LENGTH = 6;
+
+export const verifyEmailSchema = z.object({
+  email: emailField,
+  code: z
+    .string()
+    .regex(/^\d{6}$/, { error: "codeInvalid" }),
+});
+
+/** Body of POST /auth/verify-email. */
+export type VerifyEmailInput = z.output<typeof verifyEmailSchema>;
+export type VerifyEmailFormValues = z.input<typeof verifyEmailSchema>;
