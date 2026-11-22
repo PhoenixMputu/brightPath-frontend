@@ -81,12 +81,8 @@
       "metaTitle": "Verify your email",
       "metaDescription": "Enter the code you received by email to activate your BrightPath account.",
       "title": "Verify your email",
-      "subtitle": "Enter your email and the 6-digit code you received",
-      "subtitleWithEmail": "Enter the 6-digit code sent to <email>{address}</email>",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "name@example.com",
+      "subtitle": "Enter the 6-digit code sent to <email>{address}</email>",
       "codeLabel": "Verification code",
-      "codeHint": "The code expires after 10 minutes. Check your spam folder too.",
       "submit": "Verify",
       "submitting": "Verifying…",
       "success": "Email verified, your account is active",
@@ -100,7 +96,6 @@
       "alreadyActive": "Account already active?",
       "signIn": "Sign in",
       "errorCodeIncorrect": "Wrong code. Check it and try again.",
-      "errorCodeOrEmailIncorrect": "Wrong code, or unknown email address.",
       "errorCodeExpired": "This code has expired. Request a new one.",
       "errorAlreadyVerified": "This email is already verified.",
       "errorTooManyAttempts": "Too many tries for this code. Request a new one.",
@@ -111,7 +106,13 @@
       "errorEmailNotSent": "We couldn't send the email. Try again.",
       "errorInvalid": "Some details are invalid. Check the form.",
       "errorNetwork": "Can't reach the server. Check your connection and try again.",
-      "errorGeneric": "Something went wrong. Please try again."
+      "errorGeneric": "Something went wrong. Please try again.",
+      "codeValidFor": "Code valid for <strong>{time}</strong>",
+      "codeExpired": "This code has expired. Request a new one.",
+      "spamHint": "Check your spam folder too.",
+      "noPendingTitle": "No verification in progress",
+      "noPendingDescription": "Create your account to receive a verification code by email",
+      "createAccount": "Create an account"
     }
   },
   "validation": {

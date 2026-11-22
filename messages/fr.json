@@ -81,12 +81,8 @@
       "metaTitle": "Vérifier votre adresse e-mail",
       "metaDescription": "Saisissez le code reçu par e-mail pour activer votre compte BrightPath.",
       "title": "Vérifiez votre adresse e-mail",
-      "subtitle": "Saisissez votre adresse et le code à 6 chiffres reçu par e-mail",
-      "subtitleWithEmail": "Saisissez le code à 6 chiffres envoyé à <email>{address}</email>",
-      "emailLabel": "Adresse e-mail",
-      "emailPlaceholder": "nom@exemple.cd",
+      "subtitle": "Saisissez le code à 6 chiffres envoyé à <email>{address}</email>",
       "codeLabel": "Code de vérification",
-      "codeHint": "Le code expire après 10 minutes. Pensez à vérifier vos courriers indésirables.",
       "submit": "Vérifier",
       "submitting": "Vérification…",
       "success": "Adresse vérifiée, votre compte est activé",
@@ -100,7 +96,6 @@
       "alreadyActive": "Compte déjà activé ?",
       "signIn": "Se connecter",
       "errorCodeIncorrect": "Code incorrect. Vérifiez-le et réessayez.",
-      "errorCodeOrEmailIncorrect": "Code incorrect, ou adresse e-mail inconnue.",
       "errorCodeExpired": "Ce code a expiré. Demandez-en un nouveau.",
       "errorAlreadyVerified": "Cette adresse est déjà vérifiée.",
       "errorTooManyAttempts": "Trop d'essais pour ce code. Demandez-en un nouveau.",
@@ -111,7 +106,13 @@
       "errorEmailNotSent": "L'e-mail n'a pas pu être envoyé. Réessayez.",
       "errorInvalid": "Certaines informations sont invalides. Vérifiez le formulaire.",
       "errorNetwork": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
-      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+      "codeValidFor": "Code valable encore <strong>{time}</strong>",
+      "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+      "spamHint": "Pensez à vérifier vos courriers indésirables.",
+      "noPendingTitle": "Aucune vérification en cours",
+      "noPendingDescription": "Créez votre compte pour recevoir un code de vérification par e-mail",
+      "createAccount": "Créer un compte"
     }
   },
   "validation": {

@@ -114,4 +114,7 @@ export const verifyEmailSchema = z.object({
 
 /** Body of POST /auth/verify-email. */
 export type VerifyEmailInput = z.output<typeof verifyEmailSchema>;
-export type VerifyEmailFormValues = z.input<typeof verifyEmailSchema>;
+
+/** The verify-email form only asks for the code: the email comes from signup. */
+export const verificationCodeSchema = verifyEmailSchema.pick({ code: true });
+export type VerificationCodeInput = z.output<typeof verificationCodeSchema>;
