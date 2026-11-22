@@ -17,7 +17,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Controller, useForm, useWatch, type FieldPath } from "react-hook-form";
+import { Controller, useForm, type FieldPath } from "react-hook-form";
 
 import { AuthHeading } from "@/components/layout/auth-heading";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,6 @@ import {
 } from "@/schemas/auth";
 import { REGISTER_ERROR_CODES } from "@/types/auth";
 
-import { PasswordRules } from "./password-rules";
 import { ProvinceSelect } from "./province-select";
 import { SignupSuccess } from "./signup-success";
 
@@ -88,7 +87,6 @@ export function SignupForm() {
     mode: "onTouched",
   });
 
-  const password = useWatch({ control: form.control, name: "password" });
   const isPending = registerMutation.isPending;
 
   function errorText(message: string) {
@@ -324,10 +322,9 @@ export function SignupForm() {
                     autoComplete="new-password"
                     placeholder={t("passwordPlaceholder")}
                     aria-invalid={fieldState.invalid}
-                    aria-describedby={cn(
-                      "password-rules",
-                      fieldState.invalid && "password-error",
-                    )}
+                    aria-describedby={
+                      fieldState.invalid ? "password-error" : undefined
+                    }
                     disabled={isPending}
                     className={cn(inputClass, "pr-11")}
                   />
@@ -351,7 +348,6 @@ export function SignupForm() {
                     {errorText(fieldState.error.message)}
                   </FieldError>
                 )}
-                <PasswordRules id="password-rules" value={password} />
               </Field>
             )}
           />

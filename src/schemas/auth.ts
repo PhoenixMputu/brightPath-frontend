@@ -27,8 +27,6 @@ export const passwordRules = {
   digit: (value: string) => /\d/.test(value),
 } as const;
 
-export type PasswordRule = keyof typeof passwordRules;
-
 /**
  * Normalizes a phone number to E.164, as the API expects.
  * Removes spaces, dashes, dots and parentheses; "00" becomes "+";
