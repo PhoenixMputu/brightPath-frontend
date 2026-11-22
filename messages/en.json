@@ -75,11 +75,43 @@
       "errorEmailNotSent": "We couldn't send the verification email. Your account was not created, please try again.",
       "errorInvalid": "Some details are invalid. Check the form.",
       "errorNetwork": "Can't reach the server. Check your connection and try again.",
-      "errorGeneric": "Something went wrong. Please try again.",
-      "successTitle": "Check your inbox",
-      "successDescription": "We sent a 6-digit verification code to <email>{address}</email>. Enter it to activate your account.",
-      "successHint": "Remember to check your spam folder.",
-      "backToLogin": "Back to sign in"
+      "errorGeneric": "Something went wrong. Please try again."
+    },
+    "verifyEmail": {
+      "metaTitle": "Verify your email",
+      "metaDescription": "Enter the code you received by email to activate your BrightPath account.",
+      "title": "Verify your email",
+      "subtitle": "Enter your email and the 6-digit code you received",
+      "subtitleWithEmail": "Enter the 6-digit code sent to <email>{address}</email>",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "codeLabel": "Verification code",
+      "codeHint": "The code expires after 10 minutes. Check your spam folder too.",
+      "submit": "Verify",
+      "submitting": "Verifying…",
+      "success": "Email verified, your account is active",
+      "noCode": "Didn't get it?",
+      "resend": "Send a new code",
+      "resending": "Sending…",
+      "resendIn": "New code available in {time}",
+      "codeResent": "A new code is on its way",
+      "wrongEmail": "Not your address?",
+      "changeEmail": "Start signup again",
+      "alreadyActive": "Account already active?",
+      "signIn": "Sign in",
+      "errorCodeIncorrect": "Wrong code. Check it and try again.",
+      "errorCodeOrEmailIncorrect": "Wrong code, or unknown email address.",
+      "errorCodeExpired": "This code has expired. Request a new one.",
+      "errorAlreadyVerified": "This email is already verified.",
+      "errorTooManyAttempts": "Too many tries for this code. Request a new one.",
+      "errorLocked": "Too many tries today. Try again in 24 hours.",
+      "errorSessionNotOpened": "Your code was right, but we couldn't sign you in. Request a new code.",
+      "errorResendTooSoon": "A code was just sent. Wait a minute before asking for another one.",
+      "errorResendLimit": "You asked for 5 codes in the last hour. Try again later.",
+      "errorEmailNotSent": "We couldn't send the email. Try again.",
+      "errorInvalid": "Some details are invalid. Check the form.",
+      "errorNetwork": "Can't reach the server. Check your connection and try again.",
+      "errorGeneric": "Something went wrong. Please try again."
     }
   },
   "validation": {
@@ -99,6 +131,7 @@
     "cityRequired": "Enter your city.",
     "cityTooLong": "100 characters maximum.",
     "confirmPasswordRequired": "Confirm your password.",
-    "passwordMismatch": "The passwords don't match."
+    "passwordMismatch": "The passwords don't match.",
+    "codeInvalid": "Enter the 6 digits of the code."
   }
 }

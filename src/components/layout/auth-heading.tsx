@@ -4,7 +4,7 @@ export function AuthHeading({
   subtitle,
 }: {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
 }) {
   return (
     <div className="mb-8">

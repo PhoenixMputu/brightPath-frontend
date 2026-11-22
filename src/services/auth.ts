@@ -1,6 +1,14 @@
 import { apiFetch } from "@/lib/api-client";
-import type { LoginInput, RegisterPayload } from "@/schemas/auth";
-import type { RegisterResponse } from "@/types/auth";
+import type {
+  LoginInput,
+  RegisterPayload,
+  VerifyEmailInput,
+} from "@/schemas/auth";
+import type {
+  MessageResponse,
+  RegisterResponse,
+  VerifyEmailResponse,
+} from "@/types/auth";
 
 export type LoginResponse = {
   user: {
@@ -33,5 +41,24 @@ export function register(input: RegisterPayload) {
   return apiFetch<RegisterResponse>("/auth/register", {
     method: "POST",
     body,
+  });
+}
+
+/**
+ * POST /auth/verify-email: activates the account and signs the user in.
+ * The session tokens come back as httpOnly cookies, never in the body.
+ */
+export function verifyEmail(input: VerifyEmailInput) {
+  return apiFetch<VerifyEmailResponse>("/auth/verify-email", {
+    method: "POST",
+    body: { email: input.email, code: input.code },
+  });
+}
+
+/** POST /auth/resend-verification-code: replaces the current code. */
+export function resendVerificationCode(email: string) {
+  return apiFetch<MessageResponse>("/auth/resend-verification-code", {
+    method: "POST",
+    body: { email },
   });
 }
